@@ -1,39 +1,12 @@
-/******************************************
-Treehouse Techdegree:
-FSJS project 2 - List Filter and Pagination
-******************************************/
-   
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
+// Treehouse Techdegree:
+// FSJS project 2 - List Filter and Pagination
 
+// A global variable for the list items of students   
 
-/*** 
-   Add your global variables that store the DOM elements you will 
-   need to reference and/or manipulate. 
-   
-   But be mindful of which variables should be global and which 
-   should be locally scoped to one of the two main functions you're 
-   going to create. A good general rule of thumb is if the variable 
-   will only be used inside of a function, then it can be locally 
-   scoped to that function.
-***/
 const list = document.querySelectorAll('li.student-item'); 
 
+// A function that shows only ten students on each page 
 
-
-/*** 
-   Create the `showPage` function to hide all of the items in the 
-   list except for the ten you want to show.
-
-   Pro Tips: 
-     - Keep in mind that with a list of 54 students, the last page 
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when 
-       you initially define the function, and it acts as a variable 
-       or a placeholder to represent the actual function `argument` 
-       that will be passed into the parens later when you call or 
-       "invoke" the function 
-***/
 function showPage (list, page) {
    const itemPerPage = 10;  
    const startIndex = (page * itemPerPage) - itemPerPage; 
@@ -47,50 +20,43 @@ function showPage (list, page) {
    }
 }
 
+// A function that counts the amount of pages for the list
+
 function pagesNumber () {
    const itemPerPage = 10; 
    const pagesNumber = Math.ceil(list.length / itemPerPage); 
    return pagesNumber;
 }
 
-
-
-/*** 
-   Create the `appendPageLinks function` to generate, append, and add 
-   functionality to the pagination buttons.
-***/
+// A function that creates pagination buttons and make them functinal
 
 function appendPageLinks () {
    const div = document.querySelector('div.page'); 
-   const divPagination = document.createElement('div'); 
+   const divPagination = document.createElement('div'); // create a new div 
    divPagination.className = 'pagination'; 
-   div.appendChild(divPagination); 
-   const ul = document.createElement('ul');
+   div.appendChild(divPagination); // append the new div to the DOM 
+   const ul = document.createElement('ul'); // create a list of buttons
    divPagination.appendChild(ul); 
-   for (let i = 1; i <= pagesNumber(); i ++) {
+   for (let i = 1; i <= pagesNumber(); i ++) { // create and append button items for the buttons' list
       li = document.createElement('li');
       li.className = 'pagination'; 
       ul.appendChild(li); 
-      const a = document.createElement('a'); 
+      const a = document.createElement('a'); // create and append links for each button
       li.appendChild(a);  
       a.setAttribute('href', '#'); 
       a.textContent = i; 
-      ul.addEventListener('click', (e) => {
-      for (let j = 1; j <= pagesNumber(); j ++) {
-         a.classList.remove('active'); 
-           
-      e.target.classList.add('active'); 
-      showPage(list, j);
-      }
+      if (i === 1) {
+         a.className = 'active'; // make the first button active
+      } 
+      a.addEventListener('click', (e) => {
+         let activeLink = document.querySelector('a.active'); 
+         activeLink.classList.remove('active'); // remove the active class from the active button
+         e.target.classList.add('active'); // make a clicked button active
+         showPage(list, a.textContent); 
       })
    }
-   } 
+} 
 
 
 showPage(list, 1); 
 appendPageLinks(list); 
-
-
-
-
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
