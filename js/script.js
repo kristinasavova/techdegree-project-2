@@ -57,6 +57,32 @@ function appendPageLinks () {
    }
 } 
 
+// create and append the elements of searchbar
+const div = document.querySelector('div.page-header'); 
+const button = document.createElement('button'); 
+button.className = 'student-search'; 
+button.textContent = 'Search'; 
+div.appendChild(button); 
+const input = document.createElement('input'); 
+input.className = 'student-search';
+div.appendChild(input);  
+const searchedName = input.value.toLowerCase();
+
+// make searchbar funtional
+function searchBar () {
+   for (let i = 0; i < list.length; i ++) {
+      const listDiv = list.firstElementChild; 
+      const span = listDiv.lastElementChild; 
+      const h3 = span.previousElementSibling; 
+      const studentName = h3.textContent || h3.innerHTML;  
+      if (studentName.indexOf(searchedName) > -1) {
+         list.style.display = ''; 
+      } else {
+         list.style.display = 'none'; 
+      }
+   }
+}
 
 showPage(list, 1); 
 appendPageLinks(list); 
+searchBar();
