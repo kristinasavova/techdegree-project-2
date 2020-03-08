@@ -13,7 +13,7 @@ function showPage (list, page) {
    const endIndex = page * itemPerPage; 
    for (let i = 0; i < list.length; i ++) {
       if (i >= startIndex && i < endIndex) {
-         list[i].style.display = ''; 
+         list[i].style.display = 'block'; 
       } else {
          list[i].style.display = 'none'; 
       }
@@ -31,6 +31,10 @@ function pagesNumber () {
 // A function that creates pagination buttons and make them functinal
 
 function appendPageLinks () {
+   const pagDiv = document.querySelector('div.pagination'); 
+   if (pagDiv) {
+      pagDiv.remove();
+   } // remove additional rows of buttons which appear each time the search is made 
    const div = document.querySelector('div.page'); 
    const divPagination = document.createElement('div'); // create a new div 
    divPagination.className = 'pagination'; 
@@ -57,10 +61,10 @@ function appendPageLinks () {
    }
 } 
 
-// Call functions for showing a page and list pagination 
+// Call functions for showing the list with ten items on one page and pagination
 
 showPage (list, 1); 
-appendPageLinks (list); 
+appendPageLinks (list);
 
 // Create and append the elements of searchbar
 
@@ -76,38 +80,47 @@ searchbarDiv.appendChild(searchbarInput);
 const searchbarButton = document.createElement('button'); // create button 
 searchbarButton.textContent = 'Search'; 
 searchbarDiv.appendChild(searchbarButton); 
-const searchedName = searchbarInput.value.toLowerCase(); // input value
+const message = document.createElement('p'); // if search has no results, this message will be displayed 
+searchbarDiv.appendChild(message); 
+message.innerHTML = `<p>Sorry, but no matches are found by the search.<p>`;
+message.style.display = 'none'; // hide message and reveal only when the search has no results
 
-// A function for searching 
+// A function for searching by the searchbar 
 
-function searchbar (searchedName) {
-   let searchbarList = []; // an empty array to get filtered list items in
+function searching (searchName) {
+   let searchList = []; // an empty array to get filtered list items in
    for (let i = 0; i < list.length; i ++) { // looping through students' names 
-     const studentNameElement = list[i].getElementsByTagName('h3'); 
-     const studentName = studentNameElement.innerHTML;
-     if (searchedName.indexOf(studentName)) { // check if the name is equal to the searched one
-       searchbarList.push(list[i]); 
+     const studentName = list[i].children[0].children[1].innerText; 
+     if (studentName.indexOf(searchName) > -1) { // check if the name is equal to the searched one
+       searchList.push(list[i]); //  
      } 
    }
-   if (searchbarList.length === 0) { // message if the name is not found
-   let message = document.createElement('p'); 
-   pageheaderDiv.appendChild(message); 
-   message.innerHTML = `No matches are found by the search.`;
-   } else {
-      showPage(searchbarList, 1); // if the name is found, show it
-      appendPageLinks(searchbarList);
+   return searchList; 
+}
+
+// A function that shows the list of students depending on use of the searchbar
+
+function showing (searchList) {
+   if (searchList.length > 0) { // if the name is found
+      showPage (searchList, 1); // show the list of searched names 
+      appendPageLinks (searchList);
    }
+   else { // if the name is not found
+      message.style.display = ''; // message if the name is not found
+   } 
 }
 
 // A handler for the input 
 
 searchbarInput.addEventListener('keyup', () => {
-   searchbar (searchedName);
+   const searchName = searchbarInput.value.toLowerCase(); 
+   showing (searching (searchName)); 
 });
 
 // A handler for the button 
 
 searchbarButton.addEventListener('click', () => {
-   searchbar (searchedName);
+   const searchName = searchbarInput.value.toLowerCase(); 
+   showing (searching (searchName));
 });
 

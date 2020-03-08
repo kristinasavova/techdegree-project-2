@@ -1,2 +1,3 @@
-# techdegree-project-2
- The second techdegree project 
+The second techdegree project 
+
+In this project JavaScript improves the usability of a web page which contains a list of students with their avatars and email addresses. It displays only ten students at a time and add a list of navigation links at the bottom of the page to let users click through the other student entries. This solution works with a list of any numbers of students. Also a search component is added. The principle of "progressive enhancement is used: the page still displays the list of students with the JavaScript turned-off, but gets 'improved' with the JavaScript programming added.   
