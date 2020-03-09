@@ -91,9 +91,11 @@ function searching (searchName) {
    let searchList = []; // an empty array to get filtered list items in
    for (let i = 0; i < list.length; i ++) { // looping through students' names 
      const studentName = list[i].children[0].children[1].innerText; 
-     if (studentName.indexOf(searchName) > -1) { // check if the name is equal to the searched one
-       searchList.push(list[i]); //  
-     } 
+     if (studentName.indexOf(searchName) > -1) { // check if the name is equal to the searched one 
+      searchList.push(list[i]);   
+     } else {
+        list[i].style.display = 'none'; // hide list items that don't match
+     }
    }
    return searchList; 
 }
@@ -113,6 +115,7 @@ function showing (searchList) {
 // A handler for the input 
 
 searchbarInput.addEventListener('keyup', () => {
+   message.style.display = 'none'; 
    const searchName = searchbarInput.value.toLowerCase(); 
    showing (searching (searchName)); 
 });
@@ -120,6 +123,7 @@ searchbarInput.addEventListener('keyup', () => {
 // A handler for the button 
 
 searchbarButton.addEventListener('click', () => {
+   message.style.display = 'none'; 
    const searchName = searchbarInput.value.toLowerCase(); 
    showing (searching (searchName));
 });
