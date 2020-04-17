@@ -1,14 +1,14 @@
 // Treehouse Techdegree:
 // FSJS project 2 - List Filter and Pagination
 
-// A global variable for the list items of students   
+// A global variable for the list of students and amount of items per page   
 
-const list = document.querySelectorAll('li.student-item'); 
+const studentsList = document.querySelectorAll('li.student-item'); 
+const itemPerPage = 10; 
 
 // A function that shows only ten students on each page 
 
 function showPage (list, page) {
-   const itemPerPage = 10;  
    const startIndex = (page * itemPerPage) - itemPerPage; 
    const endIndex = page * itemPerPage; 
    for (let i = 0; i < list.length; i ++) {
@@ -20,17 +20,10 @@ function showPage (list, page) {
    }
 }
 
-// A function that counts the amount of pages for the list
-
-function pagesNumber () {
-   const itemPerPage = 10; 
-   const pagesNumber = Math.ceil(list.length / itemPerPage); 
-   return pagesNumber;
-}
-
 // A function that creates pagination buttons and make them functinal
 
-function appendPageLinks () {
+function appendPageLinks (list) {
+   const pagesNumber = Math.ceil(list.length / itemPerPage);
    const pagDiv = document.querySelector('div.pagination'); 
    if (pagDiv) {
       pagDiv.remove();
@@ -41,7 +34,7 @@ function appendPageLinks () {
    div.appendChild(divPagination); // append the new div to the DOM 
    const ul = document.createElement('ul'); // create a list of buttons
    divPagination.appendChild(ul); 
-   for (let i = 1; i <= pagesNumber(); i ++) { // create and append button items for the buttons' list
+   for (let i = 1; i <= pagesNumber; i ++) { // create and append button items for the buttons' list
       li = document.createElement('li');
       li.className = 'pagination'; 
       ul.appendChild(li); 
@@ -63,11 +56,12 @@ function appendPageLinks () {
 
 // Call functions for showing the list with ten items on one page and pagination
 
-showPage (list, 1); 
-appendPageLinks (list);
+showPage (studentsList, 1); 
+appendPageLinks (studentsList);
 
 // Create and append the elements of searchbar
 
+const pageDiv = document.querySelector('.page');
 const pageheaderDiv = document.querySelector('div.page-header'); 
 const searchbarDiv = document.createElement('div'); 
 pageheaderDiv.appendChild(searchbarDiv); 
@@ -75,40 +69,40 @@ searchbarDiv.className = 'student-search';
 const searchbarInput = document.createElement('input'); // create input
 searchbarInput.type = 'text'; 
 searchbarInput.setAttribute('id', 'input'); 
-searchbarInput.placeholder = 'search...'; 
+searchbarInput.placeholder = 'Search...'; 
 searchbarDiv.appendChild(searchbarInput);  
 const searchbarButton = document.createElement('button'); // create button 
 searchbarButton.textContent = 'Search'; 
 searchbarDiv.appendChild(searchbarButton); 
-const message = document.createElement('p'); // if search has no results, this message will be displayed 
-searchbarDiv.appendChild(message); 
-message.innerHTML = `<p>Sorry, but no matches are found by the search.<p>`;
+const message = document.createElement('h1'); // if search has no results, this message will be displayed 
+pageDiv.appendChild(message); 
+message.textContent = 'Sorry, but no matches are found by the search.';
 message.style.display = 'none'; // hide message and reveal only when the search has no results
 
 // A function for searching by the searchbar 
 
-function searching (searchName) {
-   let searchList = []; // an empty array to get filtered list items in
-   for (let i = 0; i < list.length; i ++) { // looping through students' names 
-     const studentName = list[i].children[0].children[1].innerText; 
-     if (studentName.indexOf(searchName) > -1) { // check if the name is equal to the searched one 
-      searchList.push(list[i]);   
+function searchStudent (name) {
+   let searchedList = []; // an empty array to get filtered list items in
+   for (let i = 0; i < studentsList.length; i ++) { // looping through students' names 
+     const studentName = studentsList[i].children[0].children[1].innerText; 
+     if (studentName.indexOf(name) > -1) { // check if the name is equal to the searched one 
+      searchedList.push(studentsList[i]);   
      } else {
-        list[i].style.display = 'none'; // hide list items that don't match
+      studentsList[i].style.display = 'none'; // hide list items that don't match
      }
    }
-   return searchList; 
+   return searchedList; 
 }
 
 // A function that shows the list of students depending on use of the searchbar
 
-function showing (searchList) {
-   if (searchList.length > 0) { // if the name is found
-      showPage (searchList, 1); // show the list of searched names 
-      appendPageLinks (searchList);
+function showSearch (list) {
+   if (list.length > 0) { // if the name is found
+      showPage (list, 1); // show the list of searched names 
+      appendPageLinks (list);
    }
    else { // if the name is not found
-      message.style.display = ''; // message if the name is not found
+      message.style.display = 'block'; // message if the name is not found
    } 
 }
 
@@ -116,15 +110,17 @@ function showing (searchList) {
 
 searchbarInput.addEventListener('keyup', () => {
    message.style.display = 'none'; 
-   const searchName = searchbarInput.value.toLowerCase(); 
-   showing (searching (searchName)); 
+   const searchedName = searchbarInput.value.toLowerCase(); 
+   const foundName = searchStudent(searchedName); 
+   showSearch(foundName); 
 });
 
 // A handler for the button 
 
 searchbarButton.addEventListener('click', () => {
    message.style.display = 'none'; 
-   const searchName = searchbarInput.value.toLowerCase(); 
-   showing (searching (searchName));
+   const searchedName = searchbarInput.value.toLowerCase(); 
+   const foundName = searchStudent(searchedName);
+   showSearch(foundName); 
 });
 

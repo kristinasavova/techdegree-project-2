@@ -1,5 +1,5 @@
 body{
-  background-color: #e1f1f6;
+  background-color: midnightblue;
   font-family: Helvetica, sans-serif;
   color: #222;
 }
@@ -39,7 +39,8 @@ body{
       border: 1px solid #eaeaea;
       padding: 8px 15px;
       font-size: 14px;
-      background-color: #4ba6c3;
+      font-weight: bold;
+      background-color: midnightblue;
       color: #fff
     }
 
@@ -67,7 +68,7 @@ body{
       .student-details h3{
         margin: 4px 0 2px 0;
         font-weight: bold;
-        color: #4ba6c3;
+        color: #222;
       }
 
       .student-details .email{
@@ -109,11 +110,11 @@ body{
       border-radius: 5px;
       padding: 3px 8px;
       text-decoration: none;
-      color: #4ba6c3;
+      color: midnightblue;
     }
 
     .pagination li a.active,
     .pagination li a:hover{
-      background-color: #4ba6c3;
+      background-color: midnightblue;
       color: #fff;
     }
